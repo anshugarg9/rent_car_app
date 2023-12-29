@@ -2,10 +2,10 @@ import 'state_provider.dart';
 import 'dart:async';
 
 class StateBloc {
-  StreamController animationController = StreamController();
+  StreamController<Object> animationController = StreamController();
   final StateProvider provider = StateProvider();
 
-  Stream get animationStatus => animationController.stream;
+  Stream<Object> get animationStatus => animationController.stream;
 
   void toggleAnimation() {
     provider.toggleAnimationValue();

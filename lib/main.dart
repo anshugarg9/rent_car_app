@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:rentcar_app/bloc/state_bloc.dart';
@@ -59,6 +57,8 @@ class LayoutStarts extends StatelessWidget {
 }
 
 class RentButton extends StatelessWidget {
+  const RentButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -86,6 +86,8 @@ class RentButton extends StatelessWidget {
 }
 
 class CarDetailsAnimation extends StatefulWidget {
+  const CarDetailsAnimation({super.key});
+
   @override
   _CarDetailsAnimationState createState() => _CarDetailsAnimationState();
 }
@@ -95,8 +97,8 @@ class _CarDetailsAnimationState extends State<CarDetailsAnimation>
   late AnimationController fadeController;
   late AnimationController scaleController;
 
-  late Animation fadeAnimation;
-  late Animation scaleAnimation;
+  late Animation<double> fadeAnimation;
+  late Animation<double> scaleAnimation;
 
   @override
   void initState() {
@@ -228,13 +230,13 @@ class _CarCarouselState extends State<CarCarousel> {
           CarouselSlider(
       options: CarouselOptions(
         height: 250,
-            viewportFraction: 1.0),
+            viewportFraction: 1.0,
+        onPageChanged: (index , carouselPageChangedReason) {
+          setState(() {
+            _current = index;
+          });
+        },),
             items: child,
-            onPageChanged: (index) {
-              setState(() {
-                _current = index;
-              });
-            },
           ),
           Container(
             margin: EdgeInsets.only(left: 25),
@@ -372,7 +374,7 @@ class SheetContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          const Text(
             "Specifications",
             style: TextStyle(
               color: Colors.black,
