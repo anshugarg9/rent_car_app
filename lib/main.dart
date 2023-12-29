@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:rentcar_app/bloc/state_bloc.dart';
@@ -63,7 +65,7 @@ class RentButton extends StatelessWidget {
       alignment: Alignment.bottomRight,
       child: SizedBox(
         width: 200,
-        child: FlatButton(
+        child: ElevatedButton(
           onPressed: () {},
           child: Text(
             "Rent Car",
@@ -73,11 +75,10 @@ class RentButton extends StatelessWidget {
                 letterSpacing: 1.4,
                 fontFamily: "arial"),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(35)),
-          ),
-          color: Colors.black,
-          padding: EdgeInsets.all(25),
+         style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+        ),
+
         ),
       ),
     );
@@ -103,10 +104,10 @@ class _CarDetailsAnimationState extends State<CarDetailsAnimation>
     super.initState();
 
     fadeController =
-        AnimationController(duration: Duration(milliseconds: 180), vsync: this);
+        AnimationController(duration: const Duration(milliseconds: 180), vsync: this);
 
     scaleController =
-        AnimationController(duration: Duration(milliseconds: 350), vsync: this);
+        AnimationController(duration: const Duration(milliseconds: 350), vsync: this);
 
     fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(fadeController);
     scaleAnimation = Tween(begin: 0.8, end: 1.0).animate(CurvedAnimation(
@@ -132,7 +133,7 @@ class _CarDetailsAnimationState extends State<CarDetailsAnimation>
         initialData: StateProvider().isAnimating,
         stream: stateBloc.animationStatus,
         builder: (context, snapshot) {
-          snapshot.data ? forward() : reverse();
+          snapshot.data != null ? forward() : reverse();
 
           return ScaleTransition(
             scale: scaleAnimation,
@@ -185,7 +186,7 @@ class CarDetails extends StatelessWidget {
             TextSpan(
                 text: currentCar.price.toString(),
                 style: TextStyle(color: Colors.grey[20])),
-            TextSpan(
+            const TextSpan(
               text: " / day",
               style: TextStyle(color: Colors.grey),
             )
@@ -225,8 +226,9 @@ class _CarCarouselState extends State<CarCarousel> {
       child: Column(
         children: <Widget>[
           CarouselSlider(
-            height: 250,
-            viewportFraction: 1.0,
+      options: CarouselOptions(
+        height: 250,
+            viewportFraction: 1.0),
             items: child,
             onPageChanged: (index) {
               setState(() {
@@ -266,8 +268,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
   double sheetTop = 400;
   double minSheetTop = 30;
 
-  Animation<double> animation;
-  AnimationController controller;
+  late Animation<double> animation;
+  late AnimationController controller;
 
   @override
   void initState() {
@@ -308,10 +310,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
         },
         onVerticalDragEnd: (DragEndDetails dragEndDetails) {
           //upward drag
-          if (dragEndDetails.primaryVelocity < 0.0) {
+          if (dragEndDetails.primaryVelocity! < 0.0) {
             forwardAnimation();
             controller.forward();
-          } else if (dragEndDetails.primaryVelocity > 0.0) {
+          } else if (dragEndDetails.primaryVelocity! > 0.0) {
             //downward drag
             reverseAnimation();
           } else {
@@ -468,7 +470,7 @@ class ListItem extends StatelessWidget {
   final double sheetItemHeight;
   final Map mapVal;
 
-  ListItem({this.sheetItemHeight, this.mapVal});
+  ListItem({required this.sheetItemHeight, required this.mapVal});
 
   @override
   Widget build(BuildContext context) {
@@ -484,10 +486,10 @@ class ListItem extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.only(right: 20),
+      margin: const EdgeInsets.only(right: 20),
       width: sheetItemHeight,
       height: sheetItemHeight,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -500,13 +502,13 @@ class ListItem extends StatelessWidget {
           isMap
               ? Text(innerMap.keys.elementAt(0),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black, letterSpacing: 1.2, fontSize: 11))
               : Container(),
           Text(
             innerMap.values.elementAt(0),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w600,
               fontSize: 15,
